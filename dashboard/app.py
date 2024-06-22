@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session, request
 import uuid
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "key123"
@@ -10,10 +11,13 @@ def index():
         session['sessions'] = []
     return render_template('index.html', sessions=session['sessions'])
 
-@app.route('/new_session')
+@app.route('/new_session', methods=['POST'])
 def new_session():
+    session_name = request.form.get('session_name')
     session_id = str(uuid.uuid4())
-    session['sessions'].append(session_id)
+    session_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    session_data = {'id': session_id, 'name': session_name, 'datetime': session_datetime}
+    session['sessions'].append(session_data)
     session.modified = True
     return redirect(url_for('index'))
 

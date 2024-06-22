@@ -34,28 +34,102 @@
             border-radius: 5px;
             text-align: center;
         }
-        .new-session-button {
+        .new-session-button, .reset-session-button {
             padding: 10px 20px;
-            background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            cursor: pointer;
             margin-right: 10px;
+        }
+        .new-session-button {
+            background-color: #007bff;
         }
         .new-session-button:hover {
             background-color: #0056b3;
+        }
+        .reset-session-button {
+            background-color: #dc3545;
+        }
+        .reset-session-button:hover {
+            background-color: #c82333;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <a href="{{ url_for('new_session') }}" class="new-session-button">New Session</a>
+        <button class="new-session-button" onclick="document.getElementById('sessionModal').style.display='block'">New Session</button>
     </div>
     <div class="content">
-        {% for session_id in sessions %}
-        <div class="session">{{ session_id }}</div>
-        {% endfor %}
+        {% if sessions and sessions|length > 0 %}
+            {% for session in sessions %}
+                {% if session.name %}
+                <div class="session">
+                    <strong>{{ session.name }}</strong> - {{ session.datetime }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No sessions available. Create a new session to get started.</p>
+        {% endif %}
     </div>
+
+    <!-- The Modal -->
+    <div id="sessionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('sessionModal').style.display='none'">&times;</span>
+            <form action="{{ url_for('new_session') }}" method="POST">
+                <label for="session_name">Session Name:</label>
+                <input type="text" id="session_name" name="session_name" required>
+                <input type="submit" value="Create Session">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('sessionModal');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
+
 
