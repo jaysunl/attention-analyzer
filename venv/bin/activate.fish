@@ -1,5 +1,9 @@
 # This file must be used with "source <venv>/bin/activate.fish" *from fish*
+<<<<<<< HEAD
 # (https://fishshell.com/); you cannot run it directly.
+=======
+# (https://fishshell.com/). You cannot run it directly.
+>>>>>>> 13bb0fc51d5aa32b3cce450536224ea91397baf6
 
 function deactivate  -d "Exit virtual environment and return to normal shell environment"
     # reset old environment variables
@@ -33,7 +37,11 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
+<<<<<<< HEAD
 set -gx VIRTUAL_ENV "/Users/jerryliang/projects/attention-analyzer/venv"
+=======
+set -gx VIRTUAL_ENV "/Users/jamieanzai/hackathon/attention-analyzer/venv"
+>>>>>>> 13bb0fc51d5aa32b3cce450536224ea91397baf6
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
