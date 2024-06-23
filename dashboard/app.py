@@ -28,5 +28,11 @@ def view_session(session_id):
         return render_template('session.html', session=session_data)
     return "Session not found", 404
 
+@app.route('/delete_session/<session_id>')
+def delete_session(session_id):
+    session['sessions'] = [s for s in session['sessions'] if s['id'] != session_id]
+    session.modified = True
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.run(debug=True)
