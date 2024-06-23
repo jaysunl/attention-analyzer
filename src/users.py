@@ -96,3 +96,13 @@ def add_session_to_user(user_name, session):
     except Exception as e:
         print(f"Error getting item: {e}")
         return None
+
+def add_session(session_name):
+    session = create_session(session_name)
+    session_item = create_session_item(session)
+    try:
+        response = user_table.put_item(Item=session_item)
+        print("Item added successfully:")
+        print(response)
+    except Exception as e:
+        print(f"Error adding item: {e}")
