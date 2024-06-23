@@ -58,6 +58,11 @@
         .hidden {
             display: none;
         }
+        #graph {
+            margin-top: 20px;
+            max-width: 100%;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -70,9 +75,10 @@
         <p>Session ID: {{ session.id }}</p>
         <div class="action-buttons">
             <label for="file-upload" class="upload-button">Upload JPEG</label>
-            <input id="file-upload" type="file" class="hidden" accept="image/jpg" onchange="uploadFile()">
+            <input id="file-upload" type="file" class="hidden" accept="image/jpeg" onchange="uploadFile('{{ session.id }}')">
             <a href="#" class="delete-button" onclick="confirmDelete('{{ session.id }}')">Delete Session</a>
         </div>
+        <img id="graph" src="" alt="Graph">
     </div>
 
     <script>
@@ -82,13 +88,14 @@
             }
         }
 
-        function uploadFile() {
+        function uploadFile(sessionId) {
             const fileInput = document.getElementById('file-upload');
             const file = fileInput.files[0];
 
             if (file) {
                 const formData = new FormData();
                 formData.append('file', file);
+                formData.append('session_id', sessionId);
 
                 fetch('/upload_image', {
                     method: 'POST',
@@ -97,8 +104,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('File uploaded successfully!');
-                        console.log('File location:', data.filepath); // You can use this filepath for your backend
+                        const graph = document.getElementById('graph');
+                        graph.src = data.graph_path;
+                        graph.style.display = 'block';
                     } else {
                         alert('File upload failed.');
                     }

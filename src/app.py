@@ -1,14 +1,16 @@
-from flask import Flask, render_template, redirect, url_for, session, request, jsonify
+from flask import Flask, render_template, redirect, url_for, session, request, jsonify, send_from_directory, send_file
 import uuid
 from datetime import datetime
 import users
 import os
 import boto3
+from main import pipeline
 
 app = Flask(__name__)
 app.secret_key = "key123"
 
 UPLOAD_FOLDER = '../input_images/'
+GRAPH_FOLDER = '.'
 ALLOWED_EXTENSIONS = {'jpg'}
 REGION='us-west-1'
 
@@ -77,9 +79,14 @@ def upload_image():
         filename = file.filename
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
-        return jsonify(success=True, filepath=filepath)
+        print(filepath)
+        plot = pipeline(filepath)
+        return jsonify(success=True, graph_path=url_for('send_graph', filename=os.path.basename(plot)))
 
-    return jsonify(success=False, message="Invalid file type")
+
+@app.route('/graphs/<filename>')
+def send_graph(filename):
+    return send_from_directory(GRAPH_FOLDER, filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
