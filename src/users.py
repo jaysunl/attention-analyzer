@@ -135,14 +135,12 @@ def add_session_to_user(user_name, session):
         print(f"Error getting item: {e}")
         return None
 
-def db_session_ids():
+def add_session(session_name):
+    session = create_session(session_name)
+    session_item = create_session_item(session)
     try:
-        response = user_table.scan()
-        items = response.get('Items', [])
-        while 'LastEvaluatedKey' in response:
-            response = user_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-            items = response.get('Items', [])
-        ids = [int(item['id']) for item in items]
-        IDS = ids
+        response = user_table.put_item(Item=session_item)
+        print("Item added successfully:")
+        print(response)
     except Exception as e:
-        print(f"Error scanning table: {e}")
+        print(f"Error adding item: {e}")

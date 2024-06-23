@@ -1,6 +1,6 @@
 import face_recognition
 from PIL import Image
-import cv2
+#import cv2
 
 def save_faces(image_path, output_dir):
     try:
