@@ -21,5 +21,12 @@ def new_session():
     session.modified = True
     return redirect(url_for('index'))
 
+@app.route('/session/<session_id>')
+def view_session(session_id):
+    session_data = next((s for s in session['sessions'] if s['id'] == session_id), None)
+    if session_data:
+        return render_template('session.html', session=session_data)
+    return "Session not found", 404
+
 if __name__ == '__main__':
     app.run(debug=True)

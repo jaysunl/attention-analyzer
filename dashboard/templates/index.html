@@ -34,6 +34,10 @@
             border-radius: 5px;
             text-align: center;
         }
+        .session a {
+            text-decoration: none;
+            color: #077bff;
+        }
         .new-session-button, .reset-session-button {
             padding: 10px 20px;
             color: white;
@@ -97,7 +101,7 @@
             {% for session in sessions %}
                 {% if session.name %}
                 <div class="session">
-                    <strong>{{ session.name }}</strong> - {{ session.datetime }}
+                    <a href="{{ url_for('view_session', session_id=session.id) }}">{{ session.name }} - {{ session.datetime }}</a>
                 </div>
                 {% endif %}
             {% endfor %}
